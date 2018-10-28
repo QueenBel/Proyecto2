@@ -28,15 +28,13 @@ var fileFilter = (req, file, cb) =>{
 
 var cargarLogo = multer({
   storage : carpetaLogo,
-  limits : {
-    fileSize : 1024*1024*5
-  },
   fileFilter : fileFilter
 });
 
 router.post('/restaurants', cargarLogo.single('LogoRest'),(req, res) =>{
+ //este var restaurante ===== a la BD mongo module.exports = restaurante;
 
-  var restaurantBD = {
+  var restaurante = {
     NombreRest : req.body.nameR,
     NitRest : req.body.nitR,
     PropietarioRest : req.body.proprietorR,
@@ -48,7 +46,7 @@ router.post('/restaurants', cargarLogo.single('LogoRest'),(req, res) =>{
     GaleriaRest : '',
     FechaRegistro: new Date()
   }
-  var restauranteDATA = new RESTAURANT(restaurantBD);
+  var restauranteDATA = new RESTAURANT(restaurante);
   restauranteDATA.save().then((resultado) => {
     console.log(resultado);
     if(resultado){
@@ -69,7 +67,7 @@ router.get('/restaurants', (req, res) => {
   })
 });
 
-router.get('/restaurants/:idRest', (req, res) =>{
+router.get(/restaurants\/[a-z0-9]{1,}$/, (req, res) =>{
   var url = req.url;
   var idRest = url.split('/')[2];
   RESTAURANT.findOne({_id : idRest}).exec((err, docs) =>{
@@ -98,9 +96,12 @@ var carpRestaurante = multer.diskStorage({
 
 var cargar = multer({
   storage : carpRestaurante
-}).single('gallery');;
+}).single('gallery');;  //single('gallery');; ==== de la bd module.exports = gallery;
 
-router.post('/galleryR', (req, res) =>{
+router.post(/galleryR\/[a-z0-9]{1,}$/, (req, res) =>{
+  var URL = req.url;
+  var IDrest = URL.split('/')[2];
+
   cargar(req, res, (err) =>{
     if(err) {
       res.status(500).json({
@@ -109,25 +110,46 @@ router.post('/galleryR', (req, res) =>{
     } else {
       var rutaURL = req.file.path.substr(6, req.file.path.length);
       console.log(rutaURL);
+//var gallery = { =====  de la bd module.exports = gallery;      
       var gallery = {
         name : req.file.originalname,
         pathFisico : req.file.path,
-        pathURL : '' + rutaURL,
-        //restID : req.body.IDrest,
+        pathURL : 'http://localhost:7070' + rutaURL,
+        restID : IDrest,
         date :  new Date()
       };
       var galRestDATA = new GALERIAREST(gallery);
       galRestDATA.save().then((infoIMG) => {
         console.log(infoIMG);
-        if(infoIMG){
-          res.status(201).json({
-            msn : 'PERFECTO'
-          });
-        } else{
-          res.status(500).json({
-            msn : "no se pudo "
-          });
+//este var restaurante ===== a la BD mongo module.exports = restaurante;
+        var restaurante = {
+          GaleriaRest : new Array()
         }
+        RESTAURANT.findOne({_id : IDrest}).exec((err, docs) =>{
+          console.log(docs);
+          var galrest = docs.GaleriaRest;
+          var aux = new Array();
+          if(galrest.length == 1 && galrest[0] == ''){
+            restaurante.GaleriaRest.push('http://localhost:7070/api/galleryR/' + infoIMG._id)
+
+          }else {
+            aux.push('http://localhost:7070/api/galleryR/' + infoIMG._id);
+            galrest = galrest.concat(aux);
+            restaurante.GaleriaRest = galrest;
+          }
+          RESTAURANT.findOneAndUpdate({_id : IDrest }, restaurante, (err, params) => {
+            if (err){
+              res.status(500).json({
+                msn : 'error en la actualizacion del restaurante'
+              });
+              return;
+            }
+            res.status(200).json(
+              req.file
+            );
+            return;
+          });
+        });
       })
     }
   });
