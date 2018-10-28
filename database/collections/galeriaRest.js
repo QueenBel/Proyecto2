@@ -4,7 +4,7 @@ var galeriaSchema = {
   name : String,
   pathFisico : String,
   pathURL : String,
-//  restID : String,
+  restID : String,
   date : Date
 };
 
