@@ -10,8 +10,8 @@ var restauranteSchema = {
   TelefonoRest : String,
   //LogRest : Number,
   //LatRest : Number,
-//  LogoRest : String,
-//  GaleriaRest : Array,
+  LogoRest : String,
+  GaleriaRest : Array,
   FechaRegistro: Date
 }
 
