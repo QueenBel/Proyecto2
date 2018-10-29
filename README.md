@@ -1,14 +1,14 @@
-Node.js + MongoDB docker compose
+NADA FUNCIONA NO VALE LA PENA
 ================================
 
-This is the simplest Node.js + MongoDB docker possible config.
+Ni node js y mongo no corren
 
-Usage
+Uso
 -----
-Simply copy `Dockerfile` and `docker-compose.yml` to your project and run `docker-compose up`.
+ your project and run `docker-compose up`.
 
-Configuration
+Configuracion
 -------------
-By default the Node.js container will listen on port `7777`, to change it edit the `ports` section of the `web` service in the `docker-compose.yml` file.
+ port `0000`,
 
-By default the MongoDB container will listen on port `27017`, to change it edit the `ports` section of the `mongo` service in the `docker-compose.yml` file.
+port `0000`, 
