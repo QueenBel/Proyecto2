@@ -4,9 +4,22 @@ var sha1 = require('sha1');
 var multer = require('multer');
 var fsgalRest = require('fs');
 
-
 var RESTAURANT = require("../../database/collections/Restaurants");
 var GALERIAREST = require("../../database/collections/galeriaRest");
+
+/*var carpMenu = multer.diskStorage({
+  destination : './public/menu',
+  filename : function(req, file, cb){
+    console.log('-------------------');
+    console.log(file);
+    cb(null, file.originalname + "-" + Date.now() + ".jpg");
+
+  }
+});
+
+var upload = multer({
+  storage : carpMenu
+});*/
 
 var carpetaLogo = multer.diskStorage({
   destination : function(req, file, cb){
@@ -40,8 +53,8 @@ router.post('/restaurants', cargarLogo.single('LogoRest'),(req, res) =>{
     PropietarioRest : req.body.proprietorR,
     CalleRest : req.body.streetR,
     TelefonoRest : req.body.phoneR,
-  //  LogRest : req.body.LogR,
-  //  LatRest : req.body.latR,
+    LonRest : req.body.lonR,
+    LatRest : req.body.latR,
     LogoRest : req.file.path,
     GaleriaRest : '',
     FechaRegistro: new Date()
@@ -96,25 +109,25 @@ var carpRestaurante = multer.diskStorage({
 
 var cargar = multer({
   storage : carpRestaurante
-}).single('gallery');;  //single('gallery');; ==== de la bd module.exports = gallery;
+})//.single('gallery');;  //single('gallery');; ==== de la bd module.exports = gallery;
 
-router.post(/galleryR\/[a-z0-9]{1,}$/, (req, res) =>{
+router.post(/galleryR\/[a-z0-9]{1,}$/, cargar.single('gallery'), (req, res) =>{
   var URL = req.url;
   var IDrest = URL.split('/')[2];
 
-  cargar(req, res, (err) =>{
+/*  cargar(req, res, (err) =>{
     if(err) {
       res.status(500).json({
         msn : 'nu se puede subir img'
       });
-    } else {
+    } else {*/
       var rutaURL = req.file.path.substr(6, req.file.path.length);
       console.log(rutaURL);
-//var gallery = { =====  de la bd module.exports = gallery;      
+//var gallery = { =====  de la bd module.exports = gallery;
       var gallery = {
         name : req.file.originalname,
         pathFisico : req.file.path,
-        pathURL : 'http://localhost:7070' + rutaURL,
+        pathURL : '' + rutaURL,
         restID : IDrest,
         date :  new Date()
       };
@@ -151,8 +164,8 @@ router.post(/galleryR\/[a-z0-9]{1,}$/, (req, res) =>{
           });
         });
       })
-    }
-  });
+  //  }
+//  });
 });
 router.get('/galleryR/:idGalR', (req, res) =>{
   var url = req.url;
