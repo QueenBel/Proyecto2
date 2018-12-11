@@ -35,8 +35,22 @@ router.post('/menus', (req, res) =>{
 });
 
 router.get('/menus', (req, res) => {
-  MENUS.find({}).exec((error, docs) =>{
-    res.status(200).json(docs);
+  MENUS.find().then((docs) =>{
+    var menus=docs.map((doc)=>{
+      return({
+        id: doc._id,
+        name:doc.NombreMen,
+        description: doc.DescripcionMen,
+        restaurante: doc.idrestaurant,
+        precio:doc.PrecioMen,
+        picture:doc.ProductoMen,
+        fecha:doc.registerdate,
+        agregar:{
+          url:'http://localhost:7070/api/addLoadFood/'+doc._id
+        }
+      });
+    })
+    res.status(200).json(menus);
   })
 });
 
@@ -55,7 +69,9 @@ router.get(/menus\/[a-z0-9]{1,}$/, (req, res) =>{
   })
 });
 
-/*CARGAR LAS GALERIA DE FOTOS DEL RESTAURANTE*/
+
+
+/*CARGAR LAS GALERIA DE FOTOS DEL PRODUCTO PARA EL MENU*/
 
 var carpMenu = multer.diskStorage({
   destination : './public/menu',
