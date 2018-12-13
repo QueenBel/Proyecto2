@@ -524,7 +524,8 @@ router.post("/uploadrestaurant",(req, res) => {
           });
           return;
         }
-        var url = req.file.path.replace(/public/g, "http://192.168.1.110:7070"+"");
+        var url = req.file.path.replace(/public/g, "http://192.168.43.197:7070"+"");
+        //var url = req.file.path.replace(/public/g, "http://192.168.1.110:7070"+"");
 
         RESTAURANT.updateOne({_id: id}, {$set:{LogoRest:url}}, (err, docs) => {
           if (err) {
@@ -801,7 +802,8 @@ router.post("/uploadmenus", (req, res) => {
           });
           return;
         }
-        var url = req.file.path.replace(/public/g, "http://192.168.1.110:7070"+"");
+        var url = req.file.path.replace(/public/g, "http://192.168.43.197:7070"+"");
+        //var url = req.file.path.replace(/public/g, "http://192.168.1.110:7070"+"");
         MENUS.updateOne({_id:id}, {$set:{ProductoMen:url}}, (err, docs) =>{
           res.status(200).json({
             "msn":"exito"
