@@ -5,11 +5,10 @@ var fsgalRest = require('fs');
 var jwt = require("jsonwebtoken");
 var sha1 = require('sha1');
 
-const CLIENT = require("../../database/collections/client");
 //var _ = require("underscore");
 var RESTAURANT = require("../../../database/collections/../../database/collections/Restaurants");
 var MENUS = require("../../../database/collections/../../database/collections/Menus");
-var CLIENT = require("../../../database/collections/../../database/collections/Clients");
+var CLIENT = require("../../../database/collections/../../database/collections/client");
 var GALERIAREST = require("../../../database/collections/../../database/collections/galeriaRest");
 var ORDER = require("../../../database/collections/../../database/collections/Orders");
 var LOAD =require("../../../utils/calcular");
@@ -234,7 +233,7 @@ router.post("/login", (req, res, next) => {
     }
   });
 });
-router.post("/", (req, res) => {
+router.post("/client", (req, res) => {
   var client = req.body;
   //Validacion de datosssss
   var firstname_reg = /\w{3,}/g
@@ -290,14 +289,12 @@ router.post("/", (req, res) => {
     password: sha1(client.password),
     registerdate: new Date
   };
-  //Validar ojo
-  client["registerdate"] = new Date();
   var cli = new CLIENT(clientdata);
   cli.save().then((docs) => {
     res.status(200).json(docs);
   });
 });
-router.get("/",(req, res) => {
+router.get("/client",(req, res) => {
 
   CLIENT.find({}).exec((err, docs) => {
     if (err) {
@@ -309,7 +306,7 @@ router.get("/",(req, res) => {
     res.status(200).json(docs);
   });
 });
-router.patch('/:id', function (req, res, next) {
+router.patch('client/:id', function (req, res, next) {
   let idUser = req.params.id;
   let userData = {};
   Object.keys(req.body).forEach((key) => {
@@ -332,7 +329,7 @@ router.patch('/:id', function (req, res, next) {
   })
 });
 
-router.delete('/:id', function (req, res, next) {
+router.delete('client/:id', function (req, res, next) {
   let idUser = req.params.id;
 
   CLIENT.remove({
