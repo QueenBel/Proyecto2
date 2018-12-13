@@ -12,9 +12,9 @@ var usersRouter = require('./routes/users');
 var casasRouter = require('./routes/house');
 
 //var restauranteRouter = require('./routes/api/serviceRestaurants');
-var menuRouter = require('./routes/api/serviceMenus');
-var clienteRouter = require('./routes/api/serviceClients');
-var ordenRouter = require('./routes/api/serviceFastFood');
+//var menuRouter = require('./routes/api/serviceMenus');
+//var clienteRouter = require('./routes/api/serviceClients');
+//var ordenRouter = require('./routes/api/serviceFastFood');
 
 var serviceRouter = require('./routes/api/service');
 var userRouter = require('./routes/api/services');
@@ -50,9 +50,9 @@ app.use('/', casasRouter);
 app.use('/users', usersRouter);
 
 //app.use('/api/', restauranteRouter);
-app.use('/api/', menuRouter);
-app.use('/api/', clienteRouter);
-app.use('/api/', ordenRouter);
+//app.use('/api/', menuRouter);
+//app.use('/api/', clienteRouter);
+//app.use('/api/', ordenRouter);
 
 app.use('/api/', serviceRouter);
 app.use('/api/', userRouter);

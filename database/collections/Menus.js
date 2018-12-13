@@ -2,7 +2,7 @@ const mongoose = require('../connect');
 var mon=require('mongoose');
 var Schema = mon.Schema;
 var menuSchema = new Schema({
-  //TipoMen : String,
+  CodigoMen : Number,
   NombreMen : String, //name
   DescripcionMen: String, //description
   ProductoMen: String, //picture
