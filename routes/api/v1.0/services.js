@@ -73,7 +73,7 @@ router.get('/viewFastFood',(req, res)=>{
   }
 });
 
-router.post('/orders', (req, res)=>{
+router.post('/orders', verifytoken, (req, res)=>{
   var params = req.body;
   if(req.session.load== null){
     res.status(200).json({
@@ -144,7 +144,7 @@ router.get('/orders/:codigo', (req, res) =>{
     });
   })
 });
-router.put("/orders",(req, res) => {
+router.put("/orders", (req, res) => {
   var params = req.body;
   var id = req.query.id;
   var objupdate = {
@@ -165,7 +165,7 @@ router.put("/orders",(req, res) => {
   });
 });
 
-router.delete("/orders",(req, res) => {
+router.delete("/orders", (req, res) => {
   var params = req.body;
   var id = req.query.id;
   //Collection of data
