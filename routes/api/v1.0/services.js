@@ -219,11 +219,12 @@ router.post("/login", (req, res, next) => {
     if (doc) {
       //res.status(200).json(doc);
       jwt.sign({name: doc.email, password: doc.password}, "seponeunallavesecreta", (err, token) => {
-          console.log("sesion exitosa");
+
           res.status(200).json({
             id : doc._id,
             token : token
           });
+          console.log(token);
       })
     } else {
       console.log("error enviar token");
@@ -241,7 +242,7 @@ router.post("/client", (req, res) => {
   var email_reg = /\w{1,}@[\w.]{1,}[.][a-z]{2,3}/g
   var phone_reg = /\d{7}[0-9]/g
   var ci_reg =/\d{1,}\w{1,3}/g
-  var password_reg =/\w{6,}/g
+  var password_reg =/\w{3,}/g
   console.log(client);
   if(client.firstname.match(firstname_reg) == null){
     res.status(400).json({
@@ -351,7 +352,7 @@ router.delete('client/:id', function (req, res, next) {
 });
 //API RESTAURANTE
 
-router.post("/restaurant", (req, res) => {
+router.post("/restaurant", verifytoken, (req, res) => {
   var params = req.body;
   var nameReg= /^[a-zA-Z0-9]{3,}$/g
   var nitReg= /^[a-zA-Z0-9]{3,}$/g
@@ -417,7 +418,7 @@ router.get(/restaurant\/[a-z0-9]{1,}$/,(req, res) => {
   });
 });
 
-router.patch("/restaurant",(req, res) => {
+router.patch("/restaurant", verifytoken, (req, res) => {
   var params = req.body;
   var id = req.query.id;
   //Collection of data
@@ -475,7 +476,7 @@ router.put("/restaurant",(req, res) => {
   });
 });
 
-router.delete("/restaurant",(req, res) => {
+router.delete("/restaurant", verifytoken, (req, res) => {
   var params = req.body;
   var id = req.query.id;
   //Collection of data
@@ -502,7 +503,7 @@ var upload = multer({
   //fileFilter: fileFilter1
 }).single("img1");
 
-router.post("/uploadrestaurant",(req, res) => {
+router.post("/uploadrestaurant", verifytoken, (req, res) => {
   var params = req.query;
   var id = params.id;
   var SUPERES = res;
@@ -627,7 +628,7 @@ router.get('/galleryR/:idGalR', (req, res) =>{
 ////////*****MENUS*****/////////////////////////*****MENUS****//////
 var CODIGO2 = require("../../../utils/auxiliar2");
 //router.post("/menus/:idmenu", (req, res) => {
-router.post("/menus", (req, res) => {
+router.post("/menus", verifytoken, (req, res) => {
   var params = req.body;
   var namem_reg = /\w{3,}/g
    var pricem_reg =/\d{1,3}.\d{0,2}/g
@@ -695,7 +696,7 @@ router.get(/menus\/[a-z0-9]{1,}$/, (req, res) => {
   });
 });
 
-router.patch("/menus", (req, res) => {
+router.patch("/menus", verifytoken, (req, res) => {
   var params = req.body;
   var id = req.query.id;
   //Collection of data
@@ -751,7 +752,7 @@ router.put("/menus", (req, res) => {
   });
 });
 
-router.delete("/menus", (req, res) => {
+router.delete("/menus", verifytoken, (req, res) => {
   var params = req.body;
   var id = req.query.id;
   //Collection of data
@@ -775,7 +776,7 @@ var upload_menu = multer({
   storage: storage_menu
 }).single("img");
 
-router.post("/uploadmenus", (req, res) => {
+router.post("/uploadmenus", verifytoken, (req, res) => {
   var id = req.query.id;
   if (id == null) {
     res.status(300).json({
