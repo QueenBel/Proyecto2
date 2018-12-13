@@ -240,7 +240,7 @@ router.post("/client", (req, res) => {
   var firstname_reg = /\w{3,}/g
   var surname_reg = /\w{3,}/g
   var email_reg = /\w{1,}@[\w.]{1,}[.][a-z]{2,3}/g
-  var phone_reg = /\d{7}[0-9]/g
+  var phone_reg = /\d{1}[0-9]/g
   var ci_reg =/\d{1,}\w{1,3}/g
   var password_reg =/\w{3,}/g
   console.log(client);
@@ -251,32 +251,32 @@ router.post("/client", (req, res) => {
     return;
   }
   if(client.surname.match(surname_reg) == null){
-    res.status(400).json({
+    res.status(401).json({
       msn : "el nombre de usuario no es correcto"
     });
     return;
   }
   if(client.email.match(email_reg) == null){
-    res.status(400).json({
+    res.status(402).json({
       msn : "el email no es correcto"
     });
     return;
   }
   if(client.password.match(password_reg) == null){
-    res.status(400).json({
+    res.status(403).json({
       msn : "el password no es correcto requiere mas de 6 caracteres "
     });
     return;
   }
 
   if(client.ci==undefined || client.ci.match(ci_reg) == null){
-    res.status(400).json({
+    res.status(404).json({
       msn : "el ci no puede estar vacio"
     });
     return;
   }
-  if(client.phone.match(phone_reg) == null||client.phone.length!=8){
-    res.status(400).json({
+  if(client.phone.match(phone_reg) == null){
+    res.status(405).json({
       msn : "el telefono es incorrecto"
     });
     return;
@@ -292,7 +292,10 @@ router.post("/client", (req, res) => {
   };
   var cli = new CLIENT(clientdata);
   cli.save().then((docs) => {
-    res.status(200).json(docs);
+    res.status(200).json({
+      "id" : docs._id,
+      "msn" : "se registro con exito"
+    });
   });
 });
 router.get("/client",(req, res) => {
